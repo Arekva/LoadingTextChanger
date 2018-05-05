@@ -20,23 +20,20 @@ namespace LoadingTextChanger
             t.text = _loadingText;
         }
         
-        try
+        void Awake()
         {
-            void Awake()
+            //Check to see if any confignodes exist
+            private bool ConfigExists;
+            if(GameDatabase.Instance.GetConfigs("TEXTCHANGER") != null)
             {
-               //Check to see if any confignodes exist
-               private bool ConfigExists;
-               if(GameDatabase.Instance.GetConfigs("TEXTCHANGER") != null)
-               {
-                    LoadingText = GameDatabase.Instance.GetConfigs("TEXTCHANGER")[0].config.GetValue("text");
-               }
-               else if(File.Exists(KSPUtil.ApplicationRootPath + @"/GameData/LoadingTextChanger/text.txt"))
-               {
-                    LoadingText = File.ReadAllText(KSPUtil.ApplicationRootPath + @"/GameData/LoadingTextChanger/text.txt");
-               }
-               
-               TextReplacer(LoadingText);
+                 LoadingText = GameDatabase.Instance.GetConfigs("TEXTCHANGER")[0].config.GetValue("text");
             }
+            else if(File.Exists(KSPUtil.ApplicationRootPath + @"/GameData/LoadingTextChanger/text.txt"))
+            {
+                 LoadingText = File.ReadAllText(KSPUtil.ApplicationRootPath + @"/GameData/LoadingTextChanger/text.txt");
+            }
+               
+            TextReplacer(LoadingText);
         }
     }
 }
