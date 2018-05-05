@@ -10,13 +10,30 @@ namespace LoadingTextChanger
     [KSPAddon(KSPAddon.Startup.EveryScene, false)]
     public class TextChanger : MonoBehaviour
     {
+        //Default text
         string LoadingText = "Wasting your time..";
-
-        void Awake()
+        
+        void TextReplacer(string _loadingText)
         {
             GameObject loadingGO = GameObject.Find("Text");
             TextMeshPro t = loadingGO.GetComponent<TMPro.TextMeshPro>();
-            t.text = LoadingText;
+            t.text = _loadingText;
+        }
+        
+        void Awake()
+        {
+            //Check to see if any confignodes exist
+            private bool ConfigExists;
+            if(GameDatabase.Instance.GetConfigs("TEXTCHANGER") != null)
+            {
+                 LoadingText = GameDatabase.Instance.GetConfigs("TEXTCHANGER")[0].config.GetValue("text");
+            }
+            else if(File.Exists(KSPUtil.ApplicationRootPath + @"/GameData/LoadingTextChanger/text.txt"))
+            {
+                 LoadingText = File.ReadAllText(KSPUtil.ApplicationRootPath + @"/GameData/LoadingTextChanger/text.txt");
+            }
+               
+            TextReplacer(LoadingText);
         }
     }
 }
